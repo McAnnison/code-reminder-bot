@@ -39,3 +39,34 @@ schedule.scheduleJob('0 9 * * *', () => {
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
+
+
+app.use(express.json());
+
+app.post('/schedule', (req, res) => {
+    const { email, time } = req.body;
+
+    schedule.scheduleJob(time, () => {
+        sendReminder(email);
+        console.log('Scheduled task executed: Reminder email sent');
+    });
+
+    res.send('Reminder scheduled');
+});
+
+const sendReminder = (email) => {
+    const mailOptions = {
+        from: process.env.EMAIL,
+        to: email,
+        subject: "Time to Code!",
+        text: "It's time for your daily 1-hour code session. Let's stick to it. We can build something great!",
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error('Error sending email:', error);
+        } else {
+            console.log('Reminder email sent:', info.response);
+        }
+    });
+};
