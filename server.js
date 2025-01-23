@@ -1,20 +1,18 @@
 const express = require('express');
 const schedule = require('node-schedule');
 const nodemailer = require('nodemailer');
-require('dotenv').config(); 
+require('dotenv').config();
 
 const app = express();
 const port = 3001;
 
-
 const transporter = nodemailer.createTransport({
-    service: 'gmail', 
+    service: 'gmail',
     auth: {
-        user: process.env.EMAIL, 
-        pass: process.env.EMAIL_PASSWORD, 
+        user: process.env.EMAIL,
+        pass: process.env.EMAIL_PASSWORD,
     },
 });
-
 
 const sendReminder = () => {
     const mailOptions = {
@@ -33,13 +31,11 @@ const sendReminder = () => {
     });
 };
 
-
 schedule.scheduleJob('0 9 * * *', () => {
     sendReminder();
     console.log('Scheduled task executed: Reminder email sent');
 });
 
-
 app.listen(port, () => {
-    console.log(`Code reminder bot is running on http://localhost:${port}`);
+    console.log(`Server is running on http://localhost:${port}`);
 });
