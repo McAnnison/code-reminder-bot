@@ -1,7 +1,7 @@
 const express = require('express');
 const schedule = require('node-schedule');
 const nodemailer = require('nodemailer');
-require('dotenv').config();
+require('dotenv').config(); 
 
 const app = express();
 const port = 3001;
